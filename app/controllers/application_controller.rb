@@ -18,13 +18,7 @@ class ApplicationController < ActionController::Base
       return false
     end
 
-    DEMO_ACCOUNTS.each do |acct|
-      if acct[:email] == email
-        return true
-      end
-    end
-
-    return false
+    return DEMO_ACCOUNTS.include?(email)
   end
 
   protected
