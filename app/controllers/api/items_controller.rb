@@ -15,8 +15,13 @@ class Api::ItemsController < Api::ApiController
       :cursor_token => params[:cursor_token],
       :limit => params[:limit]
     }
-    results = sync_manager.sync(params[:items], options)
-    post_to_extensions(params.to_unsafe_hash[:items])
+    is_demo = is_account_demo(current_user.email)
+    save_items = is_demo ? [] : params[:items]
+    puts "Saving Items: #{save_items}"
+    results = sync_manager.sync(save_items, options)
+    if is_demo == false
+      post_to_extensions(params.to_unsafe_hash[:items])
+    end
     render :json => results
   end
 
@@ -41,6 +46,9 @@ class Api::ItemsController < Api::ApiController
   # Writes all user data to backup extension.
   # This is called when a new extension is registered.
   def backup
+    if is_account_demo(current_user.email)
+      return
+    end
     ext = current_user.items.find(params[:uuid])
     url = url_for_extension(ext)
     items = current_user.items.to_a
@@ -55,12 +63,20 @@ class Api::ItemsController < Api::ApiController
   ##
 
   def create
+    if is_account_demo(current_user.email)
+      render :json => {:item => params[:item]}
+      return
+    end
     item = current_user.items.new(params[:item].permit(*permitted_params))
     item.save
     render :json => {:item => item}
   end
 
   def destroy
+    if is_account_demo(current_user.email)
+      render :json => {}, :status => 204
+      return
+    end
     ids = params[:uuids] || [params[:uuid]]
     sync_manager.destroy_items(ids)
     render :json => {}, :status => 204

@@ -25,6 +25,9 @@ class Api::AuthController < Api::ApiController
   end
 
   def change_pw
+    if is_account_demo(current_user.email)
+      return
+    end
     result = @user_manager.change_pw(current_user, params[:new_password], params)
     if result[:error]
       render :json => result, :status => 401

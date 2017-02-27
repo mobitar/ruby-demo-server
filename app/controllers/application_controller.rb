@@ -13,6 +13,20 @@ class ApplicationController < ActionController::Base
 
   end
 
+  def is_account_demo(email)
+    if DEMO_ACCOUNTS_IP_WHITELIST.include?(request.remote_ip)
+      return false
+    end
+
+    DEMO_ACCOUNTS.each do |acct|
+      if acct[:email] == email
+        return true
+      end
+    end
+
+    return false
+  end
+
   protected
 
   def set_app_domain
