@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
       return false
     end
 
-    return DEMO_ACCOUNTS.include?(email)
+    return DEMO_ACCOUNTS.include?(email) || email.include? "demo-"
   end
 
   protected
