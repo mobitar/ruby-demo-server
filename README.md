@@ -13,7 +13,7 @@ You can run your own Standard File server, and use it with any SF compatible cli
 
 - Ruby 2.2+
 - Rails 5
-- MySQL database
+- MySQL 5.6+ database
 
 **Instructions**
 
@@ -34,6 +34,7 @@ You can run your own Standard File server, and use it with any SF compatible cli
 
 	```
 	bundle install
+	bower install
 	rails db:create db:migrate
 	```
 
@@ -84,20 +85,6 @@ Database username.
 **DB_PASSWORD**
 
 Database password.
-
-#### Optional environment variables if you want to use Dropbox
-
-**HOST**
-
-Server url
-
-**DROPBOX_CLIENT_ID**
-
-Dropbox client id
-
-**DROPBOX_CLIENT_SECRET**
-
-Dropbox client secret
 
 ## Contributing
 Contributions are encouraged and welcome. Currently outstanding items:
