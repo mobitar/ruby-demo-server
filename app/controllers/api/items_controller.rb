@@ -18,7 +18,7 @@ class Api::ItemsController < Api::ApiController
     is_demo = is_account_demo(current_user.email)
 
     save_items = is_demo ? [] : params[:items]
-    results = sync_manager.sync(save_items, options)
+    results = sync_manager.sync(save_items, options, request)
 
     if is_demo == false
       post_to_extensions(params.to_unsafe_hash[:items])
