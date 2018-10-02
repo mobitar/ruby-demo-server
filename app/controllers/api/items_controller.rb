@@ -16,11 +16,14 @@ class Api::ItemsController < Api::ApiController
       :limit => params[:limit]
     }
     is_demo = is_account_demo(current_user.email)
+
     save_items = is_demo ? [] : params[:items]
     results = sync_manager.sync(save_items, options)
+
     if is_demo == false
       post_to_extensions(params.to_unsafe_hash[:items])
     end
+
     render :json => results
   end
 
